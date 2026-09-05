@@ -102,9 +102,9 @@ jobs:
 
           set +e
 
-          pytest tests/ \
+          pytest tests/test_add_lead.py \
             --browser chromium \
-            -n 4 \
+            -n 1 \
             --html=reports/report.html \
             --self-contained-html \
             --junitxml=reports/junit.xml

@@ -43,10 +43,10 @@ def _open_add_lead(page) -> None:
 
 
 def _fill_text_field(page, label: str, value: str) -> None:
-    groups = page.locator(f'div.bo-form-group:has(h5:text-is("{label}"))')
-    if groups.count() == 0:
-        groups = page.locator(f'div.bo-form-group:has-text("{label}")')
+    groups = page.locator("div.bo-form-group").filter(has_text=label)
+    groups = groups.filter(has=page.locator("input"))
     field = groups.first.locator("input").first
+    expect(field).to_be_visible(timeout=10000)
     field.fill(value)
 
 
