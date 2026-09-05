@@ -1,4 +1,4 @@
-name: Eva Playwright E2E Tests
+name: SysApp UAT Login E2E Test
 
 on:
   push:
@@ -22,14 +22,14 @@ jobs:
 
   playwright-tests:
 
-    name: Eva E2E Tests
+    name: SysApp UAT Login E2E Test
 
     runs-on: ubuntu-latest
 
     timeout-minutes: 30
 
     env:
-      BASE_URL: https://evafi.relintex.dev/
+      BASE_URL: https://hc-uat.sysappai.net/
       CI: true
 
     steps:
@@ -58,15 +58,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
 
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          fi
-
-          pip install \
-            pytest \
-            pytest-playwright \
-            pytest-html \
-            pytest-xdist
+          python -m pip install -r requirements.txt
 
 
       # --------------------------------------------------
@@ -102,7 +94,7 @@ jobs:
       # --------------------------------------------------
       # 6. Run Playwright tests
       # --------------------------------------------------
-      - name: Run Eva Playwright tests
+      - name: Run SysApp UAT login test
         id: playwright
         shell: bash
         run: |
@@ -111,7 +103,6 @@ jobs:
           set +e
 
           pytest tests/ \
-            -o addopts="" \
             --browser chromium \
             -n 4 \
             --html=reports/report.html \
@@ -197,7 +188,7 @@ jobs:
         if: always()
         shell: bash
         run: |
-          echo "## Eva Playwright E2E Test Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "## SysApp UAT Login Test Results" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
 
           echo "| Property | Value |" >> "$GITHUB_STEP_SUMMARY"

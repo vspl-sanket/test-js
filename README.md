@@ -50,7 +50,7 @@ pytest --html=report.html --self-contained-html
 Copy `.env.example` to `.env` and keep the credentials there.
 
 ```ini
-BASE_URL=https://uat.sysappai.net/
+BASE_URL=https://hc-uat.sysappai.net/
 TEST_USERNAME=sanket_vspl
 TEST_PASSWORD=Sanket123#
 ```
@@ -59,4 +59,4 @@ TEST_PASSWORD=Sanket123#
 
 - The test enters the username and fixed UAT verification code `12345`, submits `Proceed to Login`, then enters the password and submits `Log In`.
 - The test uses the stable IDs and accessible button name from the UAT login page.
-- Browser execution is configured for headless Chromium so it works in CI.
+- Browser execution defaults to headless Chromium in CI. Use `pytest --browser chromium --headed -v` to watch the browser locally.

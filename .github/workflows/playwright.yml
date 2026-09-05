@@ -1,4 +1,4 @@
-name: EvaFi Playwright Tests
+name: SysApp UAT Login Test
 
 on:
   push:
@@ -12,10 +12,11 @@ on:
   workflow_dispatch:
 
 jobs:
-
   playwright-tests:
-
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: https://hc-uat.sysappai.net/
+      CI: true
 
     steps:
 
@@ -25,31 +26,29 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-
-      - name: Create virtual environment
-        run: |
-          python -m venv venv
+          python-version: "3.12"
+          cache: pip
 
       - name: Install dependencies
         run: |
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
 
       - name: Install Playwright
         run: |
-          source venv/bin/activate
-          playwright install --with-deps
+          python -m playwright install --with-deps chromium
 
       - name: Run tests
         run: |
-          source venv/bin/activate
-          pytest
+          mkdir -p reports
+          pytest --browser chromium -v \
+            --html=reports/report.html \
+            --self-contained-html
 
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: evafi-test-reports
-          path: reports/
+          name: sysapp-uat-login-report
+          path: reports/report.html
+          if-no-files-found: ignore
