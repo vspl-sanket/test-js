@@ -8,3 +8,4 @@ report.html
 reports/
 venv/
 .venv/
+/test/__pycache__
