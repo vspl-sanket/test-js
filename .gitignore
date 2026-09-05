@@ -7,3 +7,4 @@ test-results/
 report.html
 reports/
 venv/
+.venv/

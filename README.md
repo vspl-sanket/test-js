@@ -57,5 +57,6 @@ TEST_PASSWORD=Sanket123#
 
 ## Notes
 
-- The test uses Playwright role/label-based locators first, with a small fallback chain for common login form variants.
+- The test enters the username and fixed UAT verification code `12345`, submits `Proceed to Login`, then enters the password and submits `Log In`.
+- The test uses the stable IDs and accessible button name from the UAT login page.
 - Browser execution is configured for headless Chromium so it works in CI.

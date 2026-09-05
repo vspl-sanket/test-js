@@ -20,6 +20,5 @@ def app_config() -> dict[str, str]:
 @pytest.fixture(scope="session")
 def browser_type_launch_args() -> dict[str, object]:
     return {
-        "headless": True,
         "args": ["--disable-dev-shm-usage"],
     }

@@ -364,10 +364,8 @@ jobs:
       # CI then explicitly uses:
       #
       #   Chromium
-      #   Headless
+      #   Headed through xvfb
       #   4 workers
-      #
-      # No --headed.
       #
       # ========================================================
 
@@ -388,9 +386,10 @@ jobs:
 
           echo "BASE_URL=$BASE_URL"
 
-          pytest tests/ \
+          xvfb-run -a pytest tests/ \
             -o addopts="" \
             --browser chromium \
+            --headed \
             -n 4 \
             --html=reports/report.html \
             --self-contained-html
@@ -610,7 +609,7 @@ jobs:
           echo "" >> "$GITHUB_STEP_SUMMARY"
 
           echo "- Browser: Chromium" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Mode: Headless" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Mode: Headed (xvfb)" >> "$GITHUB_STEP_SUMMARY"
           echo "- Workers: 4" >> "$GITHUB_STEP_SUMMARY"
 
           echo "" >> "$GITHUB_STEP_SUMMARY"
