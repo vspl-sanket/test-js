@@ -1,4 +1,4 @@
-name: SysApp UAT Login E2E Test
+name: SysApp UAT Login Test
 
 on:
   push:
