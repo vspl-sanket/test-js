@@ -21,4 +21,5 @@ def app_config() -> dict[str, str]:
 def browser_type_launch_args() -> dict[str, object]:
     return {
         "args": ["--disable-dev-shm-usage"],
+        "chromium_sandbox": False,
     }
