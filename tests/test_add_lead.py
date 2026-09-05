@@ -24,13 +24,18 @@ def _login(page, app_config) -> None:
     page.get_by_role("button", name="Log In").click()
 
     page.wait_for_load_state("networkidle")
-    page.locator('a[menu-id="12"]').wait_for(state="visible", timeout=15000)
+    expect(page.locator("#user_pass")).not_to_be_visible(timeout=10000)
+    expected_home_url = f'{app_config["base_url"]}/main/home'
+    expect(page).to_have_url(expected_home_url, timeout=15000)
 
 
 def _open_add_lead(page) -> None:
     sales_menu = page.locator('a[href="#nv-mnuSales"]')
+    expect(sales_menu).to_be_visible(timeout=10000)
     sales_menu.click()
-    add_lead = page.locator('a[menu-id="12"]')
+
+    expect(sales_menu).to_have_attribute("aria-expanded", "true", timeout=10000)
+    add_lead = page.locator('#nv-mnuSales a[menu-id="12"]')
     add_lead.wait_for(state="visible", timeout=10000)
     add_lead.click()
 
@@ -50,22 +55,23 @@ def _select_field_option(page, label: str, option_text: str) -> None:
     if groups.count() == 0:
         groups = page.locator(f'div.bo-form-group:has-text("{label}")')
     group = groups.first
-    select = group.locator("select").first
-
-    if select.count() > 0:
-        try:
-            select.select_option(label=option_text)
-            return
-        except Exception:
-            pass
 
     combobox = group.locator('[role="combobox"], .select2-selection').first
     if combobox.count() > 0:
-        combobox.click()
-        try:
-            page.get_by_role("option", name=option_text).click()
-        except Exception:
-            page.get_by_text(option_text, exact=True).click()
+        with page.expect_response(
+            lambda response: "lookup" in response.url,
+            timeout=10000,
+        ):
+            combobox.click()
+
+        option = page.get_by_role("option", name=option_text, exact=True)
+        expect(option).to_be_visible(timeout=10000)
+        option.click()
+        return
+
+    select = group.locator("select").first
+    if select.count() > 0:
+        select.select_option(label=option_text)
         return
 
     raise AssertionError(f"Could not find a selectable control for {label!r}.")
@@ -86,7 +92,7 @@ def test_login_and_create_add_lead(page, app_config):
 
     _fill_text_field(page, "First Name", FIRST_NAME)
     _fill_text_field(page, "Last Name", LAST_NAME)
-    _select_field_option(page, "Sales Person", SALES_PERSON)
+    _select_field_option(page, "Salesperson", SALES_PERSON)
     _select_field_option(page, "Disposition", DISPOSITION)
 
     page.locator("#btnSave").click()
